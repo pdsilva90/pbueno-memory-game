@@ -3,9 +3,7 @@
   }
   
   body {
-    height:100vh;
-    width: auto;
-    margin: 0;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -21,6 +19,19 @@
     text-align: center;
   }
   
+  #panel {
+    display: flex;
+    justify-content: space-between;
+
+
+  }
+  #header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
   .container {
     display: grid;
     justify-content: center;
@@ -28,40 +39,81 @@
   }
   .game-board {
     display: grid;
-    grid-template-columns: repeat(4, 20vmin);
-    grid-template-rows: repeat(4, 20vmin);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     align-items: center;
     padding: 5px;
     margin: auto;
     border-radius: 10px;
-     background: linear-gradient(60deg, #02ccba 0%, #aa7ecd 100%);
+    background: linear-gradient(150deg, #51087e  0%, #325cdd 100%);
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    perspective: 1000px;
   }
   
   .cards {
-    margin: auto;
+    margin: 5px;
     height: 125px;
     width: 125px;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
     justify-content: center;
+    font-size: 30px;
     align-items: center;
+    background: linear-gradient(150deg, #51087e  0%, #325cdd 100%);
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    transform-style: preserve-3d;
+    transition: transform .5s;
+    transform: scale(1);
+    color: white;
   }
-  
+
+/* #back {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  position: absolute;
+  border-radius: 5px;
+  background: #1C7CCC;
+  backface-visibility: hidden;
+}
+#front {
+  transform: rotateY(180deg);
+} */
+
   button {
      box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
     border-radius: 1vmin;
-    margin: 4vmin;
+    margin: 20px 0; 
     padding: 1vmin;
-    background: linear-gradient(60deg, #02ccba 0%, #aa7ecd 100%);
+    background: linear-gradient(150deg, #51087e  0%, #325cdd 100%);
     color: white;
-    font-size: 4vmin;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+    width: 100px;
   }
   
+  #restart {
+    width: 300px;
+    margin: 15px auto;
+    
+  }
+
   button:hover {
     color: black;
+  }
+  
+  .card:hover {
+    border: 10px solid white;
+    box-sizing: border-box;
+    box-shadow: inset 0px 0px 0px 1px white;
+  }
+
+  .card:active {
+    transform: scale(0.97);
+    transition: transform .2s;
+  }
+  .cards.flip {
+    transform: rotateY(180deg);
   }

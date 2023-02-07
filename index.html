@@ -5,32 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Game</title>
-    <script defer src="style.css"></script>
+    <link rel="stylesheet" href="./style.css">
     <script defer src="app.js"></script>
 </head>
 <body>
-    <h1>A Game Of Memory</h1>
+  <div id="header">
+    <h1>Memory Game</h1>
     <h2>Can you beat the clock??</h2>
-    <button id="start">START</button>
+  </div>
   <div class="container">
+    <div id="panel"> 
+     <button id="start">START</button>
+     <h1 id="timer">1:00</h1>
+     <button id="message"></button>
+    </div>
+
     <section class="game-board">
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
-      <div class="cards"></div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
+      <div class="cards">?</div>
     </section>
+
     <button id="restart">RESTART GAME</button>
   </div>
 
