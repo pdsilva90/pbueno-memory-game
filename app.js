@@ -13,30 +13,35 @@ const cardsColors = [...colors, ...colors]; //double colors array
 // const cardCount = 2 * colors.length;
 //   /*----- state variables -----*/
 let Board = colors.concat(colors)
-let activeCard = false;
-let match = 0;
-let hasFlipped = false;
+// let activeCard = false;
+let matchedCards = 0;
+let moveCount = 0;
+// let hasFlipped = false;
 let lockBoard = false;
 let firstCard, secondCard;
 
-const timer = {
-        seconds: 0,
-        minutes: 0, 
-        clearTimer: -1
-      };
+// const duration = 60;
+// const timer = {
+//         seconds: 0,
+//         minutes: 0, 
+//         clearTimer: -1
+//       };
+
 //   /*----- cached elements  -----*/
 const cardEls = [...document.querySelectorAll('#cards')];
 const message = document.querySelector('#header');
 const startBtn = document.querySelector('#start');
 const restartBtn = document.querySelector('#restart');
 const colorsArray = document.querySelectorAll('#div');
+const countEl = document.querySelector('#move-count');
+const messageEl = document.querySelector('h2');
 
 
 //   /*----- event listeners -----*/
 document.getElementById('game-board').addEventListener('click', flipCard);
-//restartBtn.addEventListener('click', resetBoard);
+restartBtn.addEventListener('click', resetBoard);
 startBtn.addEventListener('click', initialize);
-
+document.querySelector('input').addEventListener('click', moveCounter);
   
 //   /*----- functions -----*/
   
@@ -45,7 +50,7 @@ initialize();
 function initialize() {
     Board = colors.concat(colors);
     winner = null;
-    updateCards();
+    // updateCards();
     render();
 }
 
@@ -53,26 +58,31 @@ function flipCard(evt) {
     const randomIdx = Math.floor(Math.random() * cardsColors.length);
     const colorIdx = cardsColors[randomIdx];
     let flipCard = evt.target;
-    if(flipCard.tagName === 'SECTION') return;
-    console.log("flipCard", firstCard, secondCard)
+    if(flipCard.tagName === 'SECTION') return; //if they click on the outer grid it wont respond.
+        console.log("flipCard", firstCard, secondCard)
         flipCard.style.background = flipCard.getAttribute("name");
-        if(!firstCard) { //returns value of first card to flipcard
+    if(!firstCard) { //returns value of first card to flipcard
         firstCard = flipCard;
-        } else {
+    } else {
         secondCard = flipCard;
-        }
-         if(firstCard && secondCard){
+    }
+     if(firstCard && secondCard){
 
-        checkMatch();
-         }
+    checkMatch();
+    moveCounter();
+    winner = checkWinnner;
+    }
         // lockBoard = true;
-    render();
+render();
 }
 
 //check for matching cards 
 function checkMatch() {
     if (firstCard.getAttribute("name") === secondCard.getAttribute("name")) {
         console.log("match");
+        firstCard = null;
+        secondCard = null;
+        matchedCards++;
     } else {
     //  firstCard.classList.add('fade')
     //  secondCard.classList.add('fade')
@@ -80,74 +90,54 @@ function checkMatch() {
         console.log("no match")
         // firstCard.classList.add('front-color')
         // secondCard.classList.add('front-color')
+        console.log(firstCard, secondCard)
         firstCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
         secondCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
         firstCard = null;
         secondCard = null;
     }, 1000);
-      
     }
 }
 
+function moveCounter() {
+    moveCount += 1;
+    if(moveCount >= 20) {
+        handleLoss();
+    }
+  };  
 
-
-// function unflipCards() {
-//     // lockBoard = true;
-//     // setTimeout(() => {
-//     //   firstCard.classList.remove('flip');
-//     //   secondCard.classList.remove('flip');
-//     //   resetBoard();
-//     // }, 1000);
-// }
-
-// function disableCards() {
-//     // firstCard.removeEventListener('click', flipCard);
-//     // secondCard.removeEventListener('click', flipCard);
-//     // resetBoard();
-//   }
-  
+function handleLoss() {
+        renderMessage();
+}
 
 function checkWinnner() {
-    if (match === 8){
+    if (matchedCards === 8){
         return true;
     } else {
         return false;
     }
 };
 //   shuffle cards
-function updateCards() {
-    const randomIdx = Math.floor(Math.random() * cardsColors.length);
-    const color = cardsColors[randomIdx];
-};
-
-function startTimer () {
-    if (timer.seconds === 59) {
-      timer.minutes++;
-      timer.seconds = 0;
-    } else {
-      timer.seconds++;
-}
-
-function resetTimer() {
-    clearInterval(timer.clearTime);
-    timer.seconds = 0;
-    timer.minutes = 0;
-    (".timer").text("0:00");
-    timer.clearTime = setInterval(startTimer, 1000);
-}
+// function updateCards() {
+//     const randomIdx = Math.floor(Math.random() * cardsColors.length);
+//     const color = cardsColors[randomIdx];
+// };
 //reset board
-// function resetBoard() {
-//     matchedCards = 0;
-//     resetTimer();
-//     updateCards();
-//  };
+function resetBoard() {
+    winner = null;
+    matchedCards = 0;
+    moveCount = 0;
+    renderBoard();
+    // updateCards();
+  };
 
-function render() {
+  function render() {
     renderBoard();
     renderMessage();
+    countEl.innerHTML = moveCount;
     restartBtn.disabled =!checkWinnner;
-    //renderControls();
-}
+    // renderControls();
+  }
 
 function renderBoard() {
     Board.forEach(function(color, cardIdx) {
@@ -157,15 +147,13 @@ function renderBoard() {
       });
     };
 
-  function renderMessage() {
-    if (winner === 'true') {
-        message.innerText = "Winner winner chicken dinner! You beat the clock!";
-    } else if (winner !== true) {
-        message.innerText = "Whomp Whomp, better luck next time!";
-    }
+function renderMessage() {
+if (moveCount < 20 && matchedCards === 8) {
+    messageEl.innerText = "You win! Great guessing!"
+} else if (moveCount >= 20) {
+    messageEl.innerText = "You're out of moves! Better luck next time!"
 }
-}  
+  }
 // function renderControls() {
-//     playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
-// }
+//     // playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
 // }

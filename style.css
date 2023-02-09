@@ -15,7 +15,7 @@
 letter-spacing: 1vmin;
   }
 
-  h1, h2 {
+  h1, h2, h3 {
     margin: auto;
     font-family: Helvetica, Arial, Helvetica, sans-serif;
     color: black;
@@ -90,6 +90,20 @@ background: linear-gradient(150deg, #51087e  0%, #325cdd 100%) !important;
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+    width: 100px;
+  }
+
+  #move-count {
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+    border-radius: 1vmin;
+    margin: 20px 0; 
+    padding: 1vmin;
+    background: linear-gradient(150deg, #51087e  0%, #325cdd 100%);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
     width: 100px;
   }
   
