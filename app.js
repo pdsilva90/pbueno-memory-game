@@ -9,123 +9,163 @@ const colors = [
     "aqua", 
     "yellow"];
 
-
-const cardsColors = [...colors, ...colors];
-//console.log(cardsColors);
-const cardCount = cardsColors.length;
-//picks random idx of colors array- does it go here?
-const randomIdx = Math.floor(Math.random() * cardsColors.length);
-const color = cardsColors[randomIdx];
-console.log(color);
-//   const timer = {
-//     seconds: 0,
-//     minutes: 0, 
-//     clerTimer: -1
-//   };
-
+const cardsColors = [...colors, ...colors]; //double colors array
+// const cardCount = 2 * colors.length;
 //   /*----- state variables -----*/
-let Board = 0;
-let cardClicked = null;
-  
+let Board = colors.concat(colors)
+let activeCard = false;
+let match = 0;
+let hasFlipped = false;
+let lockBoard = false;
+let firstCard, secondCard;
+
+const timer = {
+        seconds: 0,
+        minutes: 0, 
+        clearTimer: -1
+      };
 //   /*----- cached elements  -----*/
-//   const message = document.querySelector('#header');
-//   const restartBtn = document.querySelector('#restart');
-//   //to flip the cards
-//   //const cards = document.querySelectorAll('.cards');
+const cardEls = [...document.querySelectorAll('#cards')];
+const message = document.querySelector('#header');
+const startBtn = document.querySelector('#start');
+const restartBtn = document.querySelector('#restart');
+const colorsArray = document.querySelectorAll('#div');
+
 
 //   /*----- event listeners -----*/
-  document.getElementById('cards').addEventListener('click', handleClick);
-  startBtn.addEventListener('click', initialize);
-//   //to flip the cards 
-//  // cards.forEach(cards => cards.addEventListener('click', flipCard));
+document.getElementById('game-board').addEventListener('click', flipCard);
+//restartBtn.addEventListener('click', resetBoard);
+startBtn.addEventListener('click', initialize);
+
   
 //   /*----- functions -----*/
   
-// initialize();
+initialize();
   
 function initialize() {
+    Board = colors.concat(colors);
+    winner = null;
+    updateCards();
+    render();
+}
+
+function flipCard(evt) {
+    const randomIdx = Math.floor(Math.random() * cardsColors.length);
+    const colorIdx = cardsColors[randomIdx];
+    let flipCard = evt.target;
+    if(flipCard.tagName === 'SECTION') return;
+    console.log("flipCard", firstCard, secondCard)
+        flipCard.style.background = flipCard.getAttribute("name");
+        if(!firstCard) { //returns value of first card to flipcard
+        firstCard = flipCard;
+        } else {
+        secondCard = flipCard;
+        }
+         if(firstCard && secondCard){
+
+        checkMatch();
+         }
+        // lockBoard = true;
+    render();
+}
+
+//check for matching cards 
+function checkMatch() {
+    if (firstCard.getAttribute("name") === secondCard.getAttribute("name")) {
+        console.log("match");
+    } else {
+    //  firstCard.classList.add('fade')
+    //  secondCard.classList.add('fade')
+    setTimeout(() => {
+        console.log("no match")
+        // firstCard.classList.add('front-color')
+        // secondCard.classList.add('front-color')
+        firstCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
+        secondCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
+        firstCard = null;
+        secondCard = null;
+    }, 1000);
+      
+    }
+}
+
+
+
+// function unflipCards() {
+//     // lockBoard = true;
+//     // setTimeout(() => {
+//     //   firstCard.classList.remove('flip');
+//     //   secondCard.classList.remove('flip');
+//     //   resetBoard();
+//     // }, 1000);
+// }
+
+// function disableCards() {
+//     // firstCard.removeEventListener('click', flipCard);
+//     // secondCard.removeEventListener('click', flipCard);
+//     // resetBoard();
+//   }
+  
+
+function checkWinnner() {
+    if (match === 8){
+        return true;
+    } else {
+        return false;
+    }
+};
+//   shuffle cards
+function updateCards() {
     const randomIdx = Math.floor(Math.random() * cardsColors.length);
     const color = cardsColors[randomIdx];
+};
 
-    cardsColors.splice(randomIdx, 1);
-    render();
-  }
+function startTimer () {
+    if (timer.seconds === 59) {
+      timer.minutes++;
+      timer.seconds = 0;
+    } else {
+      timer.seconds++;
+}
 
-// function handleClick(evt) {
-//     if(cardClicked ) {
-
-// } if(timer.seconds == 0 && timer.minutes == 0){
-//     resetTimer();
-// } else if () {
-
-// } else{
-// return;
-// }
-// };
-  
-// function startTimer () {
-//     if (timer.seconds === 59) {
-//       timer.minutes++;
-//       timer.seconds = 0;
-//     } else {
-//       timer.seconds++;
-//     }
-
-
-// function resetTimer() {
-//         clearInterval(timer.clearTime);
-//         timer.seconds = 0;
-//         timer.minutes = 0;
-//         $(".timer").text("0:00");
-//         timer.clearTime = setInterval(startTimer, 1000);
-//       }
-
-//     //   shuffle cards
-// function updateCards() {
-//         deck = shuffle(deck);
-//         const idx = 0;
-//       }
-
-//check card for match
-// function checkMatch(card) {
-//       const card = document.querySelectorAll('colors')
-//       const firstCard = cardClicked[0]
-//       const secondCard = cardClicked[1]
-//       if( firstCard === )
-//       }
-
-// //Check if winner
-// function checkWinner() {
-//     if (matched === 16) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
-
-  
-//   // Resets game state
-//   function restartGame ()  {
-//     resetGame();
-//   };
- 
-//  //resests cards
-//  const resetCards = function() {
-//     open.forEach(function(card) {
-//     });
-//   };
-
-// //reset board
-// function resetBoard () {
-//     match = 0;
+function resetTimer() {
+    clearInterval(timer.clearTime);
+    timer.seconds = 0;
+    timer.minutes = 0;
+    (".timer").text("0:00");
+    timer.clearTime = setInterval(startTimer, 1000);
+}
+//reset board
+// function resetBoard() {
+//     matchedCards = 0;
 //     resetTimer();
 //     updateCards();
-//   };
+//  };
 
-// function renderMessage() {
-//     if (winner) {
-//       message.innerHTML = `Congrats! You beat the timer!`;
-//     } else {
-//       message.innerHTML = "Too Slow! Better luck next time";
-//     }
-//   }
+function render() {
+    renderBoard();
+    renderMessage();
+    restartBtn.disabled =!checkWinnner;
+    //renderControls();
+}
+
+function renderBoard() {
+    Board.forEach(function(color, cardIdx) {
+        const cardsEl = document.querySelector(`.card${cardIdx}`);
+        // console.log("cardEls", cardsEl)
+        cardsEl.setAttribute('name', color);
+      });
+    };
+
+  function renderMessage() {
+    if (winner === 'true') {
+        message.innerText = "Winner winner chicken dinner! You beat the clock!";
+    } else if (winner !== true) {
+        message.innerText = "Whomp Whomp, better luck next time!";
+    }
+}
+}  
+// function renderControls() {
+//     playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
+// }
+// }
