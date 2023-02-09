@@ -10,22 +10,11 @@ const colors = [
     "yellow"];
 
 const cardsColors = [...colors, ...colors]; //double colors array
-// const cardCount = 2 * colors.length;
 //   /*----- state variables -----*/
 let Board = colors.concat(colors)
-// let activeCard = false;
 let matchedCards = 0;
 let moveCount = 0;
-// let hasFlipped = false;
-let lockBoard = false;
 let firstCard, secondCard;
-
-// const duration = 60;
-// const timer = {
-//         seconds: 0,
-//         minutes: 0, 
-//         clearTimer: -1
-//       };
 
 //   /*----- cached elements  -----*/
 const cardEls = [...document.querySelectorAll('#cards')];
@@ -39,18 +28,16 @@ const messageEl = document.querySelector('h2');
 
 //   /*----- event listeners -----*/
 document.getElementById('game-board').addEventListener('click', flipCard);
-restartBtn.addEventListener('click', resetBoard);
+restartBtn.addEventListener('click', restartGame);
 startBtn.addEventListener('click', initialize);
 document.querySelector('input').addEventListener('click', moveCounter);
   
 //   /*----- functions -----*/
-  
 initialize();
   
 function initialize() {
     Board = colors.concat(colors);
     winner = null;
-    // updateCards();
     render();
 }
 
@@ -67,25 +54,25 @@ function flipCard(evt) {
         secondCard = flipCard;
     }
      if(firstCard && secondCard){
-
     checkMatch();
     moveCounter();
     winner = checkWinnner;
     }
-        // lockBoard = true;
-render();
+    render();
 }
 
 //check for matching cards 
 function checkMatch() {
     if (firstCard.getAttribute("name") === secondCard.getAttribute("name")) {
+            //if both cards match- add matched classlist so they cant be clicked again
+    // firstCard.classList.add("matched");
+    // secondCard.classList.add("matched");
         console.log("match");
         firstCard = null;
         secondCard = null;
         matchedCards++;
     } else {
-    //  firstCard.classList.add('fade')
-    //  secondCard.classList.add('fade')
+    
     setTimeout(() => {
         console.log("no match")
         // firstCard.classList.add('front-color')
@@ -107,7 +94,9 @@ function moveCounter() {
   };  
 
 function handleLoss() {
-        renderMessage();
+    renderMessage();
+    disableGame();
+    render();
 }
 
 function checkWinnner() {
@@ -116,27 +105,32 @@ function checkWinnner() {
     } else {
         return false;
     }
-};
-//   shuffle cards
-// function updateCards() {
-//     const randomIdx = Math.floor(Math.random() * cardsColors.length);
-//     const color = cardsColors[randomIdx];
-// };
+}
+function disableGame() { //This function is for disabling start and clicking 
+    document.getElementById('game-board').removeEventListener('click', flipCard);
+    startBtn.removeEventListener('click', initialize);
+    document.querySelector('input').removeEventListener('click', moveCounter);
+}
 //reset board
-function resetBoard() {
-    winner = null;
-    matchedCards = 0;
-    moveCount = 0;
-    renderBoard();
-    // updateCards();
+function restartGame() {
+    Board.forEach(function(color, cardIdx) {
+        const cardsEl = document.querySelector(`.card${cardIdx}`);
+        cardsEl.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)";
+      })
+        let flipCard = null;
+        let firstCard = null;
+        let secondCard = null;
+        winner = null;
+        matchedCards = 0;
+        moveCount = 0;
+        render();
   };
 
   function render() {
     renderBoard();
     renderMessage();
     countEl.innerHTML = moveCount;
-    restartBtn.disabled =!checkWinnner;
-    // renderControls();
+    // startBtn.disabled =!checkWinnner;
   }
 
 function renderBoard() {
@@ -153,7 +147,4 @@ if (moveCount < 20 && matchedCards === 8) {
 } else if (moveCount >= 20) {
     messageEl.innerText = "You're out of moves! Better luck next time!"
 }
-  }
-// function renderControls() {
-//     // playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
-// }
+}

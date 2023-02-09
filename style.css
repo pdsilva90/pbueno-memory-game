@@ -11,8 +11,9 @@
     background-color: white;
     font-family: Helvetica;
   }
+
   h1 {
-letter-spacing: 1vmin;
+    letter-spacing: 1vmin;
   }
 
   h1, h2, h3 {
@@ -25,9 +26,8 @@ letter-spacing: 1vmin;
   #panel {
     display: flex;
     justify-content: space-between;
-
-
   }
+
   #header {
     display: flex;
     align-items: center;
@@ -40,6 +40,7 @@ letter-spacing: 1vmin;
     justify-content: center;
     align-items: center;
   }
+
   #game-board {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -68,17 +69,15 @@ letter-spacing: 1vmin;
     transform-style: preserve-3d;
     transition: transform .5s;
     transform: scale(1);
-  
   }
 
-.fade {
-  /* opacity: 0; */
+  .fade {
   background: linear-gradient(150deg, #51087e  0%, #325cdd 100%);
-  
-}
-.front-color {
-background: linear-gradient(150deg, #51087e  0%, #325cdd 100%) !important;
-}
+  }
+
+  .front-color {
+  background: linear-gradient(150deg, #51087e  0%, #325cdd 100%) !important;
+  } 
 
   button {
      box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
@@ -110,27 +109,12 @@ background: linear-gradient(150deg, #51087e  0%, #325cdd 100%) !important;
   #restart {
     width: 300px;
     margin: 15px auto;
-    
   }
 
   button:hover {
     color: black;
   }
   
-  /* .card.shake {
-    animation: shake 0.40s ease-in-out ;
-  } */
-  /* .card:hover {
-    border: 10px solid white;
-    box-sizing: border-box;
-    box-shadow: inset 0px 0px 0px 1px white;
-  } */
-
-  /* #card:active {
-    transform: scale(0.97);
-    transition: transform .2s;
-  } */
   cards.flip {
     transform: rotateY(180deg);
-    
   }
