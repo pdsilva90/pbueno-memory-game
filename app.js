@@ -33,11 +33,12 @@ startBtn.addEventListener('click', initialize);
 document.querySelector('input').addEventListener('click', moveCounter);
   
 //   /*----- functions -----*/
-initialize();
+// initialize();
   
 function initialize() {
     Board = colors.concat(colors);
     winner = null;
+    enableGame();
     render();
 }
 
@@ -65,8 +66,6 @@ function flipCard(evt) {
 function checkMatch() {
     if (firstCard.getAttribute("name") === secondCard.getAttribute("name")) {
             //if both cards match- add matched classlist so they cant be clicked again
-    // firstCard.classList.add("matched");
-    // secondCard.classList.add("matched");
         console.log("match");
         firstCard = null;
         secondCard = null;
@@ -75,8 +74,6 @@ function checkMatch() {
     
     setTimeout(() => {
         console.log("no match")
-        // firstCard.classList.add('front-color')
-        // secondCard.classList.add('front-color')
         console.log(firstCard, secondCard)
         firstCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
         secondCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
@@ -111,18 +108,25 @@ function disableGame() { //This function is for disabling start and clicking
     startBtn.removeEventListener('click', initialize);
     document.querySelector('input').removeEventListener('click', moveCounter);
 }
+
+function enableGame() { //This function is for disabling start and clicking 
+    document.getElementById('game-board').addEventListener('click', flipCard);
+    startBtn.addEventListener('click', initialize);
+    document.querySelector('input').addEventListener('click', moveCounter);
+}
 //reset board
 function restartGame() {
     Board.forEach(function(color, cardIdx) {
         const cardsEl = document.querySelector(`.card${cardIdx}`);
         cardsEl.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)";
       })
-        let flipCard = null;
-        let firstCard = null;
-        let secondCard = null;
+        flipCard = null;
+        firstCard = null;
+        secondCard = null;
         winner = null;
         matchedCards = 0;
         moveCount = 0;
+        messageEl.innerText = "HOW TO PLAY:";
         render();
   };
 
