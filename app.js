@@ -1,15 +1,15 @@
 /*----- constants -----*/
 const colors = [
-    "green", 
-    "purple", 
-    "red", 
-    "blue", 
-    "pink",
-    "lavender", 
-    "aqua", 
-    "yellow"];
-
-const cardsColors = [...colors, ...colors]; //double colors array
+        "green", 
+        "purple", 
+        "red", 
+        "blue", 
+        "pink",
+        "lavender", 
+        "aqua", 
+        "yellow"
+    ];
+    
 //   /*----- state variables -----*/
 let Board = colors.concat(colors)
 let matchedCards = 0;
@@ -30,51 +30,77 @@ const messageEl = document.querySelector('h2');
 document.getElementById('game-board').addEventListener('click', flipCard);
 restartBtn.addEventListener('click', restartGame);
 startBtn.addEventListener('click', initialize);
-document.querySelector('input').addEventListener('click', moveCounter);
+document.getElementById('move-count').addEventListener('click', moveCounter);
   
 //   /*----- functions -----*/
-// initialize();
   
 function initialize() {
-    Board = colors.concat(colors);
+    firstCard = null;
+    secondCard = null;
+    winner = null;
+    matchedCards = 0;
+    moveCount = 0;
     winner = null;
     enableGame();
+    newBoard();
     render();
 }
 
+function newBoard() {
+    let tempColors = [
+        "green", 
+        "purple", 
+        "red", 
+        "blue", 
+        "pink",
+        "lavender", 
+        "aqua", 
+        "yellow",
+        "green", 
+        "purple", 
+        "red", 
+        "blue", 
+        "pink",
+        "lavender", 
+        "aqua", 
+        "yellow"
+    ];
+    for (let i = 15; i >= 0; i--) { //loop through colors counting down
+        const cardsEl = document.querySelector(`.card${i}`);
+        const randNum = Math.floor(Math.random() * i);
+        const selectedColor = tempColors[randNum]; //selects random color
+        tempColors.splice(randNum,1); //removes it from list
+        cardsEl.setAttribute('name', selectedColor); //sets clss 
+    }
+}
+
 function flipCard(evt) {
-    const randomIdx = Math.floor(Math.random() * cardsColors.length);
-    const colorIdx = cardsColors[randomIdx];
     let flipCard = evt.target;
     if(flipCard.tagName === 'SECTION') return; //if they click on the outer grid it wont respond.
-        console.log("flipCard", firstCard, secondCard)
         flipCard.style.background = flipCard.getAttribute("name");
     if(!firstCard) { //returns value of first card to flipcard
         firstCard = flipCard;
     } else {
         secondCard = flipCard;
     }
-     if(firstCard && secondCard){
+     if(firstCard && secondCard){ //if both have a value
     checkMatch();
     moveCounter();
     winner = checkWinnner;
     }
     render();
 }
-
 //check for matching cards 
 function checkMatch() {
     if (firstCard.getAttribute("name") === secondCard.getAttribute("name")) {
-            //if both cards match- add matched classlist so they cant be clicked again
+            //if both cards match-add to match count
         console.log("match");
         firstCard = null;
         secondCard = null;
         matchedCards++;
     } else {
-    
+
     setTimeout(() => {
-        console.log("no match")
-        console.log(firstCard, secondCard)
         firstCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
         secondCard.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)"
         firstCard = null;
@@ -106,13 +132,13 @@ function checkWinnner() {
 function disableGame() { //This function is for disabling start and clicking 
     document.getElementById('game-board').removeEventListener('click', flipCard);
     startBtn.removeEventListener('click', initialize);
-    document.querySelector('input').removeEventListener('click', moveCounter);
+    document.getElementById('move-count').removeEventListener('click', moveCounter);
 }
 
-function enableGame() { //This function is for disabling start and clicking 
+function enableGame() { //This function is for enabling start and clicking 
     document.getElementById('game-board').addEventListener('click', flipCard);
     startBtn.addEventListener('click', initialize);
-    document.querySelector('input').addEventListener('click', moveCounter);
+    document.getElementById('move-count').addEventListener('click', moveCounter);
 }
 //reset board
 function restartGame() {
@@ -120,30 +146,20 @@ function restartGame() {
         const cardsEl = document.querySelector(`.card${cardIdx}`);
         cardsEl.style.background = "linear-gradient(150deg, #51087e  0%, #325cdd 100%)";
       })
-        flipCard = null;
-        firstCard = null;
-        secondCard = null;
-        winner = null;
-        matchedCards = 0;
-        moveCount = 0;
-        messageEl.innerText = "HOW TO PLAY:";
-        render();
+    flipCard = null;
+    firstCard = null;
+    secondCard = null;
+    winner = null;
+    matchedCards = 0;
+    moveCount = 0;
+    messageEl.innerText = "HOW TO PLAY:";
+    render();
   };
 
   function render() {
-    renderBoard();
     renderMessage();
     countEl.innerHTML = moveCount;
-    // startBtn.disabled =!checkWinnner;
   }
-
-function renderBoard() {
-    Board.forEach(function(color, cardIdx) {
-        const cardsEl = document.querySelector(`.card${cardIdx}`);
-        // console.log("cardEls", cardsEl)
-        cardsEl.setAttribute('name', color);
-      });
-    };
 
 function renderMessage() {
 if (moveCount < 20 && matchedCards === 8) {
